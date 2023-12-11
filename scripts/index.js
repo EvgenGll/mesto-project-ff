@@ -6,6 +6,7 @@ function createCard(name, link, deleteCard) {
     const cardElement = card.querySelector('.card').cloneNode(true);
     const deleteButton = cardElement.querySelector('.card__delete-button');
     cardElement.querySelector('.card__image').src = link;
+    cardElement.querySelector('.card__image').alt = name;
     cardElement.querySelector('.card__title').textContent = name;
     deleteButton.addEventListener('click', function (event) {
         deleteCard(event)
@@ -20,6 +21,4 @@ function deleteCard() {
 }
 
 initialCards.forEach(item => placesList.append(createCard(item.name, item.link, deleteCard)));
-/*for(let i=0; i < initialCards.length; i++) {
-    placesList.append(createCard(initialCards[i].name, initialCards[i].link, deleteCard));
-}*/
+
