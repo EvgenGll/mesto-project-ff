@@ -1,28 +1,26 @@
- function handleModalClick(popup) {
-  if (popup.key === 'Escape') {
-    CloseModal(document.querySelector('.popup_is-opened'))
+function closePressEscapeModal(popup) {
+  if (popup.key === "Escape") {
+    closeModal(document.querySelector(".popup_is-opened"));
   }
 }
 
- function CloseOverlay(event) {
-  if (event.target.classList.contains('popup_is-opened')) {
-    return CloseModal(event.target);
+function closeOverlay(event) {
+  if (event.target.classList.contains("popup_is-opened")) {
+    closeModal(event.target);
   }
-  if (event.target.closest('.popup__close')) {
-    return CloseModal(event.target.closest('.popup'));
+  if (event.target.closest(".popup__close")) {
+    closeModal(event.target.closest(".popup"));
   }
 }
 
-function OpenModal(popup) {
-  popup.classList.add('popup_is-animated');
-  popup.classList.add('popup_is-opened');
-  document.addEventListener('keydown', handleModalClick);
+function openModal(popup) {
+  popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closePressEscapeModal);
 }
 
+function closeModal(popup) {
+  popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", closePressEscapeModal);
+}
 
-function CloseModal(popup) {
-  popup.classList.remove('popup_is-opened');
-  document.addEventListener('keydown', handleModalClick);
-  }
-
-export { OpenModal, CloseModal, CloseOverlay };
+export { openModal, closeModal, closeOverlay };

@@ -1,29 +1,25 @@
+const card = document.querySelector("#card-template").content;
 
-import { OpenFullScreen } from '../pages/index.js';
+export function createCard(name, link, deleteCard, openFullScreen, likeCard) {
+  const cardElement = card.querySelector(".card").cloneNode(true);
+  const deleteButton = cardElement.querySelector(".card__delete-button");
+  const image = cardElement.querySelector(".card__image");
+  const cardLikeButton = cardElement.querySelector(".card__like-button");
+  deleteButton.addEventListener("click", function (event) {
+    deleteCard(event);
+  });
+  image.src = link;
+  image.alt = name;
+  cardElement.querySelector(".card__title").textContent = name;
 
-const card = document.querySelector('#card-template').content;
+  image.addEventListener("click", function () {
+    openFullScreen(name, link);
+  });
 
-export function createCard(name, link, deleteCard) {
-  const cardElement = card.querySelector('.card').cloneNode(true);
-  const deleteButton = cardElement.querySelector('.card__delete-button');
-  const image = cardElement.querySelector('.card__image');
-  cardElement.querySelector('.card__image').src = link;
-  cardElement.querySelector('.card__image').alt = name;
-  cardElement.querySelector('.card__title').textContent = name;
-  
-  deleteButton.addEventListener('click', function (event) {
-    deleteCard(event)
-});
-image.addEventListener('click', function() {
-  OpenFullScreen(name, link);
-});
-
-const cardLikeButton = cardElement.querySelector('.card__like-button');
-function LikeCard() {
-cardLikeButton.classList.toggle('card__like-button_is-active');
-}
-cardLikeButton.addEventListener('click', LikeCard);
+  cardLikeButton.addEventListener("click", likeCard);
   return cardElement;
 }
 
-
+export function likeCard(evt) {
+  evt.target.classList.toggle("card__like-button_is-active");
+}

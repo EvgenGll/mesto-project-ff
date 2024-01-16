@@ -1,72 +1,73 @@
+import "./index.css";
 
-import './index.css';
+import { initialCards } from "../components/cards.js";
 
-import { initialCards } from '../components/cards.js';
+import { openModal, closeModal, closeOverlay } from "../components/modal.js";
 
-import { OpenModal, CloseModal, CloseOverlay } from '../components/modal.js';
+import { createCard, likeCard } from "../components/card.js";
 
-import { createCard } from '../components/card.js';
+const placesList = document.querySelector(".places__list");
 
-const placesList = document.querySelector('.places__list');
+const popupProfile = document.querySelector(".popup_type_edit");
+const popupNewCard = document.querySelector(".popup_type_new-card");
+const popupTypeImage = document.querySelector(".popup_type_image");
 
-const popupProfile = document.querySelector('.popup_type_edit');
-const popupNewCard = document.querySelector('.popup_type_new-card');
-const popupTypeImage = document.querySelector('.popup_type_image');
+const profileEditButton = document.querySelector(".profile__edit-button");
+const profileAddButton = document.querySelector(".profile__add-button");
 
-const ProfileEditButton = document.querySelector('.profile__edit-button');
-const ProfileAddButton = document.querySelector('.profile__add-button');
+const popupImage = document.querySelector(".popup__image");
+const popupCaption = document.querySelector(".popup__caption");
+const popupCloseProfile = popupProfile.querySelector(".popup__close");
+const popupCloseNewCard = popupNewCard.querySelector(".popup__close");
 
-const popupImage = document.querySelector('.popup__image');
-const popupCaption = document.querySelector('.popup__caption');
-const popupCloseProfile = popupProfile.querySelector('.popup__close');
-const popupCloseNewCard = popupNewCard.querySelector('.popup__close');
+const formElement = document.forms["edit-profile"];
+const nameProfileInput = formElement.querySelector(".popup__input_type_name");
+const jobProfileInput = formElement.querySelector(".popup__input_type_description");
+const profileName = document.querySelector(".profile__title");
+const profileDescription = document.querySelector(".profile__description");
 
-const formElement = document.forms['edit-profile'];
-const nameProfileInput = formElement.querySelector('.popup__input_type_name');
-const jobProfileInput = formElement.querySelector('.popup__input_type_description');
-const profileName = document.querySelector('.profile__title');
-const profileDescription = document.querySelector('.profile__description');
-
-const popupForm = popupNewCard.querySelector('.popup__form');
-const nameInput = popupForm.querySelector('.popup__input_type_card-name');
-const linkInput = popupForm.querySelector('.popup__input_type_url');
+const popupForm = popupNewCard.querySelector(".popup__form");
+const nameInput = popupForm.querySelector(".popup__input_type_card-name");
+const linkInput = popupForm.querySelector(".popup__input_type_url");
 
 function deleteCard() {
-  const listItem = event.target.closest('.places__item');
+  const listItem = event.target.closest(".places__item");
   listItem.remove();
 }
 
-export function OpenFullScreen(name, link) {
+function openFullScreen(name, link) {
   popupImage.src = link;
+  popupImage.alt = name;
   popupCaption.textContent = name;
-  OpenModal(popupTypeImage);
+  openModal(popupTypeImage);
 }
 
-function handleFormSubmit(evt) {
-  evt.preventDefault();
+profileEditButton.addEventListener("click", function () {
+  openModal(popupProfile);
+});
+saveInputs();
 
+popupCloseProfile.addEventListener("click", function () {
+  closeModal(popupProfile);
+});
+
+function saveInputs() {
+  nameProfileInput.value = profileName.textContent;
+  jobProfileInput.value = profileDescription.textContent;
+}
+
+function handleEditForm(evt) {
+  evt.preventDefault();
   const nameInputValue = nameProfileInput.value;
   const jobInputValue = jobProfileInput.value;
-  /*nameProfileInput.value = profileName.textContent;
-  jobProfileInput.value = profileDescription.textContent;*/
-
-  const setProfile = ({ name, description }) => {
-    profileName.textContent = name;
-    profileDescription.textContent = description;
-  }
-  setProfile(nameInputValue, jobInputValue);
-
-  profileName.replaceWith(nameInputValue);
-  profileDescription.replaceWith(jobInputValue);
-
-  formElement.reset();
-  CloseModal(document.querySelector('.popup_is-opened'));
+  profileName.textContent = nameInputValue;
+  profileDescription.textContent = jobInputValue;
+  closeModal(popupProfile);
 }
 
-formElement.addEventListener('submit', handleFormSubmit); 
+formElement.addEventListener("submit", handleEditForm);
 
-
-popupForm.addEventListener('submit', function(evt) {
+popupForm.addEventListener("submit", function (evt) {
   evt.preventDefault();
   const nameValue = nameInput.value;
   const linkValue = linkInput.value;
@@ -74,30 +75,21 @@ popupForm.addEventListener('submit', function(evt) {
 
   placesList.prepend(newCard);
   popupForm.reset();
-
-  CloseModal(document.querySelector('.popup_is-opened'));
+  closeModal(popupNewCard);
 });
 
-
-ProfileEditButton.addEventListener('click', function () {
-  OpenModal(popupProfile);
+profileAddButton.addEventListener("click", function () {
+  openModal(popupNewCard);
 });
 
-popupCloseProfile.addEventListener('click', function () {
-  CloseModal(popupProfile);
-})
+popupCloseNewCard.addEventListener("click", function () {
+  closeModal(popupNewCard);
+});
 
-ProfileAddButton.addEventListener('click', function () {
-  OpenModal(popupNewCard);
-})
+popupTypeImage.addEventListener("click", closeOverlay);
+popupNewCard.addEventListener("click", closeOverlay);
 
-popupCloseNewCard.addEventListener('click', function () {
-  CloseModal(popupNewCard);
-})
+popupProfile.addEventListener("click", closeOverlay);
 
-popupTypeImage.addEventListener('click', CloseOverlay);
-popupNewCard.addEventListener('click', CloseOverlay);
-
-popupProfile.addEventListener('click', CloseOverlay);
-
-initialCards.forEach(item => placesList.append(createCard(item.name, item.link, deleteCard)));
+initialCards.forEach((item) =>
+  placesList.append(createCard(item.name, item.link, deleteCard, openFullScreen, likeCard)));
