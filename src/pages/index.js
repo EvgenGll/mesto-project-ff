@@ -4,7 +4,7 @@ import { initialCards } from "../components/cards.js";
 
 import { openModal, closeModal, closeOverlay } from "../components/modal.js";
 
-import { createCard, likeCard } from "../components/card.js";
+import { createCard, likeCard, deleteCard } from "../components/card.js";
 
 const placesList = document.querySelector(".places__list");
 
@@ -30,10 +30,7 @@ const popupForm = popupNewCard.querySelector(".popup__form");
 const nameInput = popupForm.querySelector(".popup__input_type_card-name");
 const linkInput = popupForm.querySelector(".popup__input_type_url");
 
-function deleteCard() {
-  const listItem = event.target.closest(".places__item");
-  listItem.remove();
-}
+
 
 function openFullScreen(name, link) {
   popupImage.src = link;
@@ -44,8 +41,9 @@ function openFullScreen(name, link) {
 
 profileEditButton.addEventListener("click", function () {
   openModal(popupProfile);
+  saveInputs();
 });
-saveInputs();
+
 
 popupCloseProfile.addEventListener("click", function () {
   closeModal(popupProfile);
@@ -71,7 +69,7 @@ popupForm.addEventListener("submit", function (evt) {
   evt.preventDefault();
   const nameValue = nameInput.value;
   const linkValue = linkInput.value;
-  const newCard = createCard(nameValue, linkValue, deleteCard);
+  const newCard = createCard(nameValue, linkValue, deleteCard, openFullScreen, likeCard);
 
   placesList.prepend(newCard);
   popupForm.reset();
