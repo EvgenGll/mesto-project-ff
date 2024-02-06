@@ -58,7 +58,6 @@ const profileSaveButton = profilePopupAvatar.querySelector(".popup__button");
 function addCard(
   card,
   createCard,
-  placesList,
   cardTemplate,
   deleteCard,
   openFullScreen,
@@ -82,7 +81,6 @@ function fillCards(initialCards, userId) {
     addCard(
       card,
       createCard,
-      placesList,
       cardTemplate,
       deleteCard,
       openFullScreen,

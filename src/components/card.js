@@ -27,7 +27,7 @@ export function createCard(
   if (userId === card.owner._id) {
     deleteButton.classList.remove("card__delete-button-hidden");
     deleteButton.addEventListener("click", () => {
-      deleteCard(cardId, card);
+      deleteCard(cardId, cardElement);
     });
   } else {
     deleteButton.classList.add("card__delete-button-hidden");
@@ -58,11 +58,10 @@ export function likeCard(cardLikeButton, likeCounter, cardId) {
     });
 }
 
-export function deleteCard(cardId, card) {
+export function deleteCard(cardId, cardElement) {
   deleteMyCard(cardId)
     .then(() => {
-      const listItem = card.closest("card");
-      listItem.remove();
+      cardElement.remove();
     })
     .catch((err) => {
       console.log(err);
