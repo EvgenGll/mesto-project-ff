@@ -4,11 +4,7 @@ import { openModal, closeModal, closeOverlay } from "../components/modal.js";
 
 import { createCard, likeCard, deleteCard } from "../components/card.js";
 
-import {
-  enableValidation,
-  clearValidation,
-  validationConfig,
-} from "../components/validation.js";
+import { enableValidation, clearValidation } from "../components/validation.js";
 
 import {
   getUserInfo,
@@ -35,9 +31,9 @@ const popupCaption = document.querySelector(".popup__caption");
 const popupCloseProfile = popupProfile.querySelector(".popup__close");
 const popupCloseNewCard = popupNewCard.querySelector(".popup__close");
 
-const formElement = document.forms["edit-profile"];
-const nameProfileInput = formElement.querySelector(".popup__input_type_name");
-const jobProfileInput = formElement.querySelector(
+const formEditProfile = document.forms["edit-profile"];
+const nameProfileInput = formEditProfile.querySelector(".popup__input_type_name");
+const jobProfileInput = formEditProfile.querySelector(
   ".popup__input_type_description"
 );
 const profileName = document.querySelector(".profile__title");
@@ -54,6 +50,15 @@ const closeProfileButton = profilePopupAvatar.querySelector(".popup__close");
 const profileFormAvatar = document.forms["avatar_edit"];
 const profileLinkInput = profileFormAvatar.querySelector(".popup__input_type_url");
 const profileSaveButton = profilePopupAvatar.querySelector(".popup__button");
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 function addCard(
   card,
@@ -105,8 +110,8 @@ function openFullScreen(card) {
 
 profileEditButton.addEventListener("click", function () {
   openModal(popupProfile);
-  saveInputs();
-  clearValidation(formElement, validationConfig);
+  fillPopupEditInputs();
+  clearValidation(formEditProfile, validationConfig);
 });
 
 popupCloseProfile.addEventListener("click", function () {
@@ -114,7 +119,7 @@ popupCloseProfile.addEventListener("click", function () {
 });
 
 /// Функция сохранения полей ввода формы
-function saveInputs() {
+function fillPopupEditInputs() {
   nameProfileInput.value = profileName.textContent;
   jobProfileInput.value = profileDescription.textContent;
 }
@@ -173,7 +178,7 @@ function handleProfileAvatar(evt) {
 
 profileFormAvatar.addEventListener("submit", handleProfileAvatar);
 
-formElement.addEventListener("submit", handleEditForm);
+formEditProfile.addEventListener("submit", handleEditForm);
 
 /// Функция добавления карточек на страницу
 function handleAddCard(evt) {
